@@ -1,0 +1,9 @@
+fastapi==0.121.0
+pydantic_settings==2.11.0
+uvicorn==0.38.0
+logging==0.4.9.6
+isort==7.0.0
+flake8==7.3.0
+pytest==8.4.2
+redis==7.0.1
+httpx==0.28.1
