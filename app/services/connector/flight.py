@@ -2,10 +2,9 @@ from datetime import timedelta
 from decimal import Decimal
 
 from app.data import TEST_AVIA_SERVICE_DETAILS_RESPONSE
-from app.schemas import FlightSchema
+from app.schemas import FlightSchema, ObjectType
 from app.services.abc_classes import AbstractFlight
-from app.services.connector.helpers import (avia_location, class_avia,
-                                            parse_dt, safe_baggage)
+from app.services.connector.helpers import (direction_data, class_avia, parse_dt, safe_baggage)
 
 
 class Flight(AbstractFlight):
@@ -26,6 +25,7 @@ class Flight(AbstractFlight):
 
 		segments = []
 		for seg in flight_data["segments"]:
+
 			arrival = seg["arrival"]
 			departure = seg["departure"]
 
@@ -35,14 +35,11 @@ class Flight(AbstractFlight):
 			}
 
 			segment = {
-				"arrival": avia_location(arrival["airport"], arrival["city"], arrival["country"],
-				                         arrival.get("terminal")),
+				"arrival": direction_data(seg["arrival"]),
 				"arrival_at": parse_dt(arrival["datetime"]),
 				"arrival_at_utc": parse_dt(arrival["datetime"])-timedelta(hours=int(arrival["timezone_offset"])),
 				"arrival_at_timezone_offset": int(arrival["timezone_offset"]),
-				"departure": avia_location(departure["airport"], departure["city"],
-				                           departure["country"],
-				                           departure.get("terminal")),
+				"departure": direction_data(seg["departure"]),
 				"departure_at": parse_dt(departure["datetime"]),
 				"departure_at_utc": parse_dt(departure["datetime"]) - timedelta(
 					hours=int(departure["timezone_offset"])),
@@ -55,13 +52,13 @@ class Flight(AbstractFlight):
 				"baggage": baggage,
 				"flight_class": class_avia(seg.get("class", {}).get("name")),
 				"carrier": {
-					"type": "carrier",
+					"type": ObjectType.carrier.value,
 					"id": str(seg["carrier"]["id"]),
 					"name": seg["carrier"]["title"],
 				},
 				"fare_code": seg.get("fare_code") or "",
 				"aircraft": {
-					"type": "aircraft",
+					"type": ObjectType.airport.value,
 					"id": seg["aircraft"]["code"],
 					"name": seg["aircraft"]["title"],
 				},

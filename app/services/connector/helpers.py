@@ -7,22 +7,6 @@ def parse_dt(x):
 	return datetime.strptime(x, "%d.%m.%Y %H:%M:%S")
 
 
-def loc_from(x, type_):
-	return {
-		"type": type_,
-		"name": x.get("title") or x.get("code") or "",
-	}
-
-
-def avia_location(airport, city, country, terminal):
-	return {
-		"airport": loc_from(airport, ObjectType.airport.value),
-		"city": loc_from(city, ObjectType.city.value),
-		"country": loc_from(country, ObjectType.country.value),
-		"terminal": loc_from({"title": terminal or ""}, ObjectType.terminal.value),
-	}
-
-
 def safe_baggage(bag: dict) -> dict:
 	bag = bag or {}
 	return {
@@ -35,10 +19,20 @@ def safe_baggage(bag: dict) -> dict:
 def class_avia(class_type: str) -> ClassAvia:
 	match class_type:
 		case "B":
-			return ClassAvia.economy
+			return ClassAvia.economy.value
 		case "F":
-			return ClassAvia.first
+			return ClassAvia.first.value
 		case "C":
-			return ClassAvia.comfort
+			return ClassAvia.comfort.value
 		case _:
-			return ClassAvia.economy
+			return ClassAvia.economy.value
+
+
+def direction_data(segment_direction):
+	return {
+		"airport": {"type": ObjectType.airport, "name": segment_direction["airport"]["title"]},
+		"country": {"type": ObjectType.country, "name": segment_direction["country"]["title"]},
+		"city": {"type": ObjectType.city, "name": segment_direction["city"]["title"]},
+		"terminal": {"type": ObjectType.terminal, "name": segment_direction["terminal"]},
+	}
+
