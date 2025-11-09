@@ -498,6 +498,3 @@ TEST_AVIA_SERVICE_DETAILS_RESPONSE = {
         'is_travel_policy_compliant': True,
     },
 }
-
-import json
-print(json.dumps(TEST_AVIA_SERVICE_DETAILS_RESPONSE))

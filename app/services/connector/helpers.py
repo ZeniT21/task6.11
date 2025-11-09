@@ -3,7 +3,7 @@ from datetime import datetime
 from app.schemas import ClassAvia, ObjectType
 
 
-def parse_dt(x):
+def pars_dt(x):
 	return datetime.strptime(x, "%d.%m.%Y %H:%M:%S")
 
 
@@ -35,4 +35,3 @@ def direction_data(segment_direction):
 		"city": {"type": ObjectType.city, "name": segment_direction["city"]["title"]},
 		"terminal": {"type": ObjectType.terminal, "name": segment_direction["terminal"]},
 	}
-

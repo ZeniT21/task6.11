@@ -15,6 +15,7 @@ class Settings(BaseSettings):
     redis_db: str = os.getenv("REDIS_DB")
     redis_password: str = os.getenv("REDIS_PWD")
     cache_timeout: int = os.getenv("CACHE_TIMEOUT")
+    flight_cache_key: str = os.getenv("FLIGHT_CACHE_KEY")
 
 
 settings = Settings()
